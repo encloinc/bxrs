@@ -1,10 +1,11 @@
-# boxedts
+# tsboxed
 
 > Rust-inspired Result ergonomics for TypeScript services that require explicit, typed error propagation.
 
 Boxed wraps every return value in a discriminated union so downstream callers cannot forget to handle failures. The API mirrors the ergonomics you get from Rust's `Result`, while staying entirely within plain TypeScript objects (`status`, `data`, `errorType`, `message`).
 
 ## Table of Contents
+
 - [Motivation](#motivation)
 - [Installation](#installation)
 - [Quick Start](#quick-start)
@@ -47,7 +48,9 @@ import {
 
 type UserError = "UserNotFound" | "UserInactive" | "DbOffline";
 
-function fetchUser(id: string): BoxedResponse<{ id: string; role: string }, UserError> {
+function fetchUser(
+  id: string
+): BoxedResponse<{ id: string; role: string }, UserError> {
   if (id === "root") {
     return Ok({ id, role: "admin" });
   }
@@ -55,9 +58,10 @@ function fetchUser(id: string): BoxedResponse<{ id: string; role: string }, User
   return Err("user was not found", "UserNotFound");
 }
 
-function ensureActive(
-  user: { id: string; role: string }
-): BoxedResponse<{ id: string; role: string }, UserError> {
+function ensureActive(user: {
+  id: string;
+  role: string;
+}): BoxedResponse<{ id: string; role: string }, UserError> {
   return user.role === "suspended"
     ? Err("user is inactive", "UserInactive")
     : Ok(user);
@@ -140,10 +144,7 @@ In addition to the instance methods, several standalone helpers live in `index.t
 - `consumeAll(tuple, consumeFn = consumeOrThrow)` – accepts a tuple/array of `BoxedResponse`s and returns a tuple of just the success payloads, short-circuiting through the provided consumer.
 
 ```ts
-const [user, plan] = consumeAll([
-  fetchUser("root"),
-  fetchPlan("pro"),
-]);
+const [user, plan] = consumeAll([fetchUser("root"), fetchPlan("pro")]);
 
 // Provide your own consumer to keep errors inside the tuple.
 const [userOrNull, planOrNull] = consumeAll(
@@ -203,16 +204,16 @@ const [user, subscription] = consumeAll(resultTuple);
 
 ## API Cheat Sheet
 
-| Export | Description |
-| --- | --- |
-| `IBoxedError<E>` / `BoxedError<E>` | Error shape with `status: false`, `errorType`, optional `message`, and Rust-like helpers. |
-| `IBoxedSuccess<T, E>` / `BoxedSuccess<T, E>` | Success shape with `status: true`, `data`, and matching helpers. |
-| `BoxedResponse<T, E>` | Union of the two shapes used as the public return type. |
-| `Ok(data)` / `Err(message?, errorType?)` | Convenience constructors for success/error values. |
-| `isBoxedError`, `isErr`, `isOk` | Type guards that refine a `BoxedResponse`. |
-| `consumeOrThrow`, `consumeOrNull`, `consumeOrCallback` | Helpers for destructing a response according to your preferred error strategy. |
-| `consumeUntilSuccess`, `retryOnBoxedError`, `retryOrThrow` | Async utilities for polling or retrying until you get a success. |
-| `consumeAll` | Tuple-aware consumer that returns only the success payloads. |
+| Export                                                     | Description                                                                               |
+| ---------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| `IBoxedError<E>` / `BoxedError<E>`                         | Error shape with `status: false`, `errorType`, optional `message`, and Rust-like helpers. |
+| `IBoxedSuccess<T, E>` / `BoxedSuccess<T, E>`               | Success shape with `status: true`, `data`, and matching helpers.                          |
+| `BoxedResponse<T, E>`                                      | Union of the two shapes used as the public return type.                                   |
+| `Ok(data)` / `Err(message?, errorType?)`                   | Convenience constructors for success/error values.                                        |
+| `isBoxedError`, `isErr`, `isOk`                            | Type guards that refine a `BoxedResponse`.                                                |
+| `consumeOrThrow`, `consumeOrNull`, `consumeOrCallback`     | Helpers for destructing a response according to your preferred error strategy.            |
+| `consumeUntilSuccess`, `retryOnBoxedError`, `retryOrThrow` | Async utilities for polling or retrying until you get a success.                          |
+| `consumeAll`                                               | Tuple-aware consumer that returns only the success payloads.                              |
 
 ## Best Practices
 

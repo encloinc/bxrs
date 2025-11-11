@@ -1,0 +1,29 @@
+{
+  "name": "tsboxed",
+  "version": "1.0.0",
+  "description": "Boxed is a collection of types and builders for safe error handling on typescript.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "prepare": "npm run build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/encloinc/boxedts.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/encloinc/boxedts/issues"
+  },
+  "homepage": "https://github.com/encloinc/boxedts#readme",
+  "files": [
+    "dist"
+  ],
+  "devDependencies": {
+    "@types/node": "^24.10.0",
+    "typescript": "^5.9.3"
+  }
+}

@@ -25,14 +25,14 @@ Every backend function that returns a `BoxedResponse` MUST have its error types 
 ## Installation
 
 ```bash
-npm install tsboxed
+npm install bxrs
 # or
-yarn add tsboxed
+yarn add bxrs
 # or
-pnpm add tsboxed
+pnpm add bxrs
 ```
 
-The published package name is `tsboxed` even though the repository is `boxedts`.
+The published package name is `bxrs` even though the repository is `boxedts`.
 
 ## Quick Start
 
